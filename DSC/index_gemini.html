@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMDb</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+       
+        :root {
+            --cosmo-purple: #7c3aed; 
+            --cosmo-dark-purple: #6d28d9;
+            --cosmo-blue: #3b82f6;
+            --cosmo-light-blue: #60a5fa;
+            --cosmo-star-color: #fcd34d; 
+        }
+
+        .search-input {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            background-color: #2a2a2a;
+            border-color: var(--cosmo-purple); 
+        }
+        .navbar {
+            background: linear-gradient(to bottom, #000000cc, transparent);
+        }
+        .hero-section {
+            background-size: cover;
+            background-position: center;
+        }
+        .trending-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.6); 
+        }
+
+        
+        .cosmo-purple-text {
+            color: var(--cosmo-purple);
+        }
+        .cosmo-purple-bg {
+            background-color: var(--cosmo-purple);
+        }
+        .cosmo-purple-bg:hover {
+            background-color: var(--cosmo-dark-purple);
+        }
+        .rating-star {
+            color: var(--cosmo-star-color); 
+        }
+        .menu-item {
+            transition: all 0.2s ease;
+        }
+        .menu-item:hover {
+            color: var(--cosmo-purple); 
+            transform: translateX(5px);
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <nav class="navbar fixed w-full z-50 px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <a href="#" class="flex items-center">
+                <span class="text-2xl font-bold cosmo-purple-text">IMDb</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <div class="dropdown relative">
+                    <button class="flex items-center space-x-1 hover:text-cosmo-purple-text">
+                        <span> Menu</span>
+                        <i data-feather="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div class="dropdown-menu absolute hidden mt-2 w-48 bg-gray-900 rounded-md shadow-lg py-1 z-50">
+                        <a href="#" class="menu-item block px-4 py-2 hover:bg-gray-800">Movies</a>
+                        <a href="#" class="menu-item block px-4 py-2 hover:bg-gray-800">Tv SHOWS</a>
+                        <a href="#" class="menu-item block px-4 py-2 hover:bg-gray-800">AWARDS</a>
+                    </div>
+                </div>
+                <a href="#" class="hover:text-cosmo-purple-text">List</a>
+                <a href="#" class="hover:text-cosmo-purple-text"> Sign In</a>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <div class="relative hidden md:block">
+                <input type="text" placeholder="Search Movie" aria-label="Search CosmoDB" class="search-input rounded-full py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-cosmo-purple-text">
+                <i data-feather="search" class="absolute right-3 top-2.5 text-gray-400"></i>
+            </div>
+            <button class="md:hidden" aria-label="Search">
+                <i data-feather="search" class="w-5 h-5"></i>
+            </button>
+            <button class="md:hidden" aria-label="Menu">
+                <i data-feather="menu" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </nav>
+   <section class="hero-section h-screen flex items-center justify-center relative overflow-hidden"
+         style="background: radial-gradient(circle, rgba(15,23,42,0.8) 0%, rgba(0,0,0,0.9) 100%), 
+                url('/360_F_804928270_ROm9Al5QgQs8NjVJolPPUaFxKwZ6cjUW.jpg'); 
+                background-size: cover; 
+                background-position: center;">
+
+  <canvas id="stars"></canvas>
+
+  <h1 class="relative z-10 text-center font-extrabold text-[4vw] md:text-[6vw] lg:text-[8vw] leading-[1.1]"
+    style="
+      color: #0b5471; /* light blue text */
+      font-family: 'Poppins', 'Arial', sans-serif; /* cinematic font */
+    ">
+  YOUR MOVIE <br>UNIVERSE
+</h1>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap" rel="stylesheet">
+
+<style>
+@keyframes bounceShadow {
+  0%, 100% { text-shadow: 0 0 15px rgba(255,255,255,0.3), 0 0 25px rgba(255,255,255,0.2); transform: translateY(0); }
+  50% { text-shadow: 0 0 30px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.4); transform: translateY(-10px); }
+}
+.animate-bounce-shadow {
+  animation: bounceShadow 2.5s infinite ease-in-out;
+}
+</style>
+
+<style>
+@keyframes bounceShadow {
+  0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(255,255,255,0.2); transform: translateY(0); }
+  50% { text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 30px rgba(255,255,255,0.4); transform: translateY(-10px); }
+}
+
+.animate-bounce-shadow {
+  animation: bounceShadow 2.5s infinite ease-in-out;
+}
+</style>
+
+</section>
+
+<style>
+  .hero-section canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allows clicks to pass through */
+  }
+</style>
+
+<script>
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+
+  let stars = [];
+  const numStars = 200;
+
+  for (let i = 0; i < numStars; i++) {
+    let baseRadius = Math.random() * 1.5 + 0.5;
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      baseRadius: baseRadius,
+      radius: baseRadius,
+      opacity: Math.random(),
+      fade: Math.random() * 0.02 + 0.005,
+      grow: Math.random() * 0.02 + 0.005,
+      speedX: Math.random() * 0.3 - 0.15,
+      speedY: Math.random() * 1 + 0.3
+    });
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(star => {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+      ctx.fill();
+
+      // Twinkle
+      star.opacity += star.fade;
+      if (star.opacity <= 0 || star.opacity >= 1) star.fade = -star.fade;
+
+      // Pulsation
+      star.radius += star.grow;
+      if (star.radius <= star.baseRadius * 0.8 || star.radius >= star.baseRadius * 1.6) star.grow = -star.grow;
+
+      // Falling movement
+      star.x += star.speedX;
+      star.y += star.speedY;
+
+      // Reset if out of screen
+      if (star.y > canvas.height || star.x < 0 || star.x > canvas.width) {
+        star.x = Math.random() * canvas.width;
+        star.y = 0;
+      }
+    });
+  }
+
+  function animate() {
+    drawStars();
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  window.addEventListener("resize", resizeCanvas);
+</script>
+
+     <section class="hero-section h-screen flex items-center justify-center px-4 md:px-8 pt-20" style="background: radial-gradient(circle, rgba(15,23,42,0.8) 0%, rgba(0,0,0,0.9) 100%), url('/Gemini_Generated_Image_m6r4yam6r4yam6r4.png'); background-size: cover; background-position: center;">
+        <div class="text-center max-w-4xl" data-aos="fade-up">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Explore the <span class="cosmo-purple-text">Galaxy</span> of films</h1>
+            <p class="text-xl mb-8">Discover, rate, and share your favorite movies.
+Join a universe where stories come alive</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <input type="text" placeholder="Search for films, series, cosmic beings..." aria-label="Search for films, series, cosmic beings" class="search-input rounded-full py-3 px-6 w-full focus:outline-none focus:ring-2 focus:ring-cosmo-purple-text">
+                <button class="cosmo-purple-bg text-white font-bold py-3 px-6 rounded-full hover:cosmo-dark-purple transition">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold">Trending Films</h2>
+                <a href="#" class="cosmo-purple-text hover:underline">View All</a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <div class="trending-card rounded-lg overflow-hidden transition duration-300 cursor-pointer bg-gray-900" data-aos="fade-up">
+                    <div class="relative">
+                        <img src="/Untitled11111.jpeg" alt="Space Odyssey Poster" class="w-full h-auto object-cover aspect-[2/3]">
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded-md flex items-center">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span class="text-sm">8.5</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold truncate">Cosmic Drift</h3>
+                        <p class="text-gray-400 text-sm">2342 • Sci-Fi Epic</p>
+                    </div>
+                </div>
+                
+                <div class="trending-card rounded-lg overflow-hidden transition duration-300 cursor-pointer bg-gray-900" data-aos="fade-up" data-aos-delay="100">
+                    <div class="relative">
+                        <img src="/lionking.jpeg" alt="Alien Planet Poster" class="w-full h-auto object-cover aspect-[2/3]">
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded-md flex items-center">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span class="text-sm">9.0</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold truncate">Nebula's Cry</h3>
+                        <p class="text-gray-400 text-sm">2350 • Space Thriller</p>
+                    </div>
+                </div>
+                
+                <div class="trending-card rounded-lg overflow-hidden transition duration-300 cursor-pointer bg-gray-900" data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative">
+                        <img src="/11.jpeg" alt="Planet Surface Poster" class="w-full h-auto object-cover aspect-[2/3]">
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded-md flex items-center">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span class="text-sm">7.8</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold truncate">The Void Beyond</h3>
+                        <p class="text-gray-400 text-sm">2338 • Adventure</p>
+                    </div>
+                </div>
+                
+                <div class="trending-card rounded-lg overflow-hidden transition duration-300 cursor-pointer bg-gray-900" data-aos="fade-up" data-aos-delay="300">
+                    <div class="relative">
+                        <img src="/Untitled111.jpeg" alt="Alien City Poster" class="w-full h-auto object-cover aspect-[2/3]">
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded-md flex items-center">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span class="text-sm">8.2</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold truncate">Galactic Frontier</h3>
+                        <p class="text-gray-400 text-sm">2345 • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="trending-card rounded-lg overflow-hidden transition duration-300 cursor-pointer bg-gray-900" data-aos="fade-up" data-aos-delay="400">
+                    <div class="relative">
+                        <img src="/11.jpeg" alt="Spaceship Poster" class="w-full h-auto object-cover aspect-[2/3]">
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded-md flex items-center">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span class="text-sm">8.7</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold truncate">Starship Odyssey</h3>
+                        <p class="text-gray-400 text-sm">2348 • Action</p>
+                    </div>
+                </div>
+                
+                <div class="trending-card rounded-lg overflow-hidden transition duration-300 cursor-pointer bg-gray-900" data-aos="fade-up" data-aos-delay="500">
+                    <div class="relative">
+                        <img src="/1.jpeg" alt="Astronaut Poster" class="w-full h-auto object-cover aspect-[2/3]">
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded-md flex items-center">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span class="text-sm">7.5</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold truncate">Zero-G Chronicles</h3>
+                        <p class="text-gray-400 text-sm">2340 • Thriller</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<div class="trending-card bg-gray-900 rounded-xl overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:rotate-1 hover:shadow-2xl relative">
+  <img src="/lionking.jpeg" class="w-full h-auto object-cover">
+  <div class="absolute top-2 right-2 flex items-center bg-black bg-opacity-60 px-2 py-1 rounded">
+    <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
+    <span class="ml-1">8.7</span>
+  </div>
+  <div class="p-4">
+    <h3 class="font-bold text-lg">Lion King</h3>
+    <p class="text-gray-400 text-sm">2020 • Sci-Fi Epic</p>
+  </div>
+</div>
+
+<script>
+// Tilt effect on hover
+document.querySelectorAll('.trending-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dx = (x - cx) / cx;
+    const dy = (y - cy) / cy;
+    card.style.transform = `rotateY(${dx * 10}deg) rotateX(${-dy * 10}deg) scale(1.05)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateY(0) rotateX(0) scale(1)';
+  });
+});
+</script>
+
+    <section class="py-16 px-4 md:px-8 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold">Highest-Rated Cosmic Journeys</h2>
+                <a href="#" class="cosmo-purple-text hover:underline">View All</a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="flex bg-gray-800 rounded-lg overflow-hidden" data-aos="fade-right">
+                    <div class="w-1/3">
+                        <img src="/inter.jpeg" alt="Deep Space Poster" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <div class="flex items-center mb-2">
+                            <span class="cosmo-purple-text font-bold mr-2">1</span>
+                            <h3 class="font-bold">Interstellar</h3>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span>9.3</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">2330 • Sci-Fi Drama</p>
+                        <p class="text-sm line-clamp-3">A lone explorer faces an existential crisis when a wormhole transports him to a universe where time flows backward.</p>
+                    </div>
+                </div>
+                
+                <div class="flex bg-gray-800 rounded-lg overflow-hidden" data-aos="fade-right" data-aos-delay="100">
+                    <div class="w-1/3">
+                        <img src="/geo.jpeg" alt="Galaxy Poster" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <div class="flex items-center mb-2">
+                            <span class="cosmo-purple-text font-bold mr-2">2</span>
+                            <h3 class="font-bold">Chronicles of Xylos</h3>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span>9.2</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">2325 • Space Opera</p>
+                        <p class="text-sm line-clamp-3">The ancient struggle between two galactic empires reaches its climax as a young pilot uncovers a devastating secret.</p>
+                    </div>
+                </div>
+                
+                <div class="flex bg-gray-800 rounded-lg overflow-hidden" data-aos="fade-right" data-aos-delay="200">
+                    <div class="w-1/3">
+                        <img src="/lionking.jpeg" alt="Nebula Poster" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <div class="flex items-center mb-2">
+                            <span class="cosmo-purple-text font-bold mr-2">3</span>
+                            <h3 class="font-bold">Echoes of Sol</h3>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <i data-feather="star" class="rating-star mr-1 w-4 h-4 fill-current"></i>
+                            <span>9.0</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">2335 • Action Sci-Fi</p>
+                        <p class="text-sm line-clamp-3">A forgotten distress signal from Earth's last colony ship leads a mercenary crew on a perilous journey through uncharted space.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold">Upcoming Star Drops</h2>
+                <a href="#" class="cosmo-purple-text hover:underline">View All</a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-800 rounded-lg overflow-hidden" data-aos="zoom-in">
+                    <img src="/conj.jpeg" alt="Alien Forest Poster" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-xl">Conjuring(2010)</h3>
+                                <p class="text-gray-400">Arriving Cycle 240, Sol-Month 5</p>
+                            </div>
+                            <button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i data-feather="plus" class="w-4 h-4 mr-1"></i>
+                                Stargazer List
+                            </button>
+                        </div>
+                        <p class="text-gray-300 line-clamp-3">Humanity's first colony ship reaches a verdant, yet hostile, exoplanet, setting the stage for an epic struggle for survival.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg overflow-hidden" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="/crawl.jpeg" alt="Space Battle Poster" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-xl">Crawl(2019)</h3>
+                                <p class="text-gray-400">Arriving Cycle 240, Sol-Month 8</p>
+                            </div>
+                            <button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i data-feather="plus" class="w-4 h-4 mr-1"></i>
+                                Stargazer List
+                            </button>
+                        </div>
+                        <p class="text-gray-300 line-clamp-3">A notorious band of space pirates finds themselves caught between warring factions as an ancient alien threat re-emerges from the galactic core.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg overflow-hidden" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="/Untitled.jpeg" alt="Future City Poster" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-xl">Lights Out(2016)</h3>
+                                <p class="text-gray-400">Arriving Cycle 241, Sol-Month 1</p>
+                            </div>
+                            <button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-full text-sm flex items-center">
+                                <i data-feather="plus" class="w-4 h-4 mr-1"></i>
+                                Stargazer List
+                            </button>
+                        </div>
+                        <p class="text-gray-300 line-clamp-3">In a sprawling megacity on a distant world, a detective uncovers a conspiracy that threatens to plunge the galaxy into cybernetic war.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 py-12 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="font-bold text-lg mb-4 cosmo-purple-text">CosmoDB</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">Press Orb</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Galactic Ads</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Cosmic Careers</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Terms of Traverse</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Privacy Protocol</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="font-bold text-lg mb-4">Support</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">Help Sector</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Contact Astrogators</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Feedback Beam</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="font-bold text-lg mb-4">Connect</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white">InterstellarBook</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Star-Tweets</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Insta-Galaxy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">CosmoTube</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="font-bold text-lg mb-4 cosmo-purple-text">CosmoDB Pro</h3>
+                <p class="text-gray-400 mb-4">For interstellar professionals</p>
+                <button class="cosmo-purple-bg text-white font-bold py-2 px-4 rounded hover:cosmo-dark-purple transition">Engage Pro Warp</button>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-800">
+            <p class="text-gray-400 text-center">© 2300-2400 by CosmoDB Nexus.</p>
+        </div>
+    </footer>
+
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out-quad'
+        });
+        feather.replace();
+    </script>
+</body>
+</html>
